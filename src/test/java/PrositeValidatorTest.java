@@ -2,7 +2,6 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class PrositeValidatorTest {
 
@@ -77,20 +76,4 @@ public class PrositeValidatorTest {
     private boolean validate(String pattern) {
         return sut.validate(pattern);
     }
-
-    @Test
-    public void testBracketsInPattern() throws Exception {
-        String prositePattern = "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]";
-
-
-        assertTrue(true);
-    }
-
-
-    public void testPrositePatternLength() throws Exception {
-
-
-    }
-
-
 }
