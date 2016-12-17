@@ -13,25 +13,26 @@ class Prosite {
 
         for (int proteinIndex = 0; proteinIndex < protein.length(); proteinIndex++) {
             for (int patternIndex = 0; patternIndex < patternElements.size(); patternIndex++) {
+                if (proteinIndex + patternIndex < protein.length() ) {
+                    String patternElement = patternElements.get(patternIndex);
+                    boolean proteinMatches;
 
-                String patternElement = patternElements.get(patternIndex);
-                boolean proteinMatches;
-
-                if (patternElement.contains("x")) {   //case 1: wildcard
-                    proteinMatches = wildcardMatches(patternElement);
-                } else if (patternElement.contains("[")) { //case 2: one acid from bracket
-                    proteinMatches = oneFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
-                } else if (patternElement.contains("{")) {   //case 3: not acid in bracket
-                    proteinMatches = notInFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
-                } else {  //case 4: acidMatches
-                    proteinMatches = acidMatches(protein, proteinIndex, patternIndex, patternElement);
-                }
-                if (proteinMatches) {
-                    if (patternIndex == patternElements.size() - 1) {
-                        indexes.add(proteinIndex);
+                    if (patternElement.contains("x")) {   //case 1: wildcard
+                        proteinMatches = wildcardMatches(patternElement);
+                    } else if (patternElement.contains("[")) { //case 2: one acid from bracket
+                        proteinMatches = oneFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
+                    } else if (patternElement.contains("{")) {   //case 3: not acid in bracket
+                        proteinMatches = notInFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
+                    } else {  //case 4: acidMatches
+                        proteinMatches = acidMatches(protein, proteinIndex, patternIndex, patternElement);
                     }
-                } else {
-                    patternIndex = patternElements.size();
+                    if (proteinMatches) {
+                        if (patternIndex == patternElements.size() - 1) {
+                            indexes.add(proteinIndex);
+                        }
+                    } else {
+                        patternIndex = patternElements.size();
+                    }
                 }
             }
         }
