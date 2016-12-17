@@ -15,13 +15,21 @@ class Prosite {
             for (int patternIndex = 0; patternIndex < patternElements.size(); patternIndex++) {
 
                 String patternElement = patternElements.get(patternIndex);
-                //case 1: wildcard
-                boolean wildcardMatches = wildcardMatches(patternElement);
-                //case 2: specific value
-                boolean acidMatches = acidMatches(protein, proteinIndex, patternIndex, patternElement);
-                if (wildcardMatches || acidMatches) {
-                    if (patternIndex == patternElements.size() - 1)
+                boolean proteinMatches;
+
+                if (patternElement.contains("x")) {   //case 1: wildcard
+                    proteinMatches = wildcardMatches(patternElement);
+                } else if (patternElement.contains("[")) { //case 2: one acid from bracket
+                    proteinMatches = oneFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
+                } else if (patternElement.contains("{")) {   //case 3: not acid in bracket
+                    proteinMatches = notInFromBracketMachers(protein, proteinIndex, patternIndex, patternElement);
+                } else {  //case 4: acidMatches
+                    proteinMatches = acidMatches(protein, proteinIndex, patternIndex, patternElement);
+                }
+                if (proteinMatches) {
+                    if (patternIndex == patternElements.size() - 1) {
                         indexes.add(proteinIndex);
+                    }
                 } else {
                     patternIndex = patternElements.size();
                 }
@@ -39,6 +47,17 @@ class Prosite {
                 valueOf(protein.charAt(proteinIndex + patternIndex)),
                 patternElement
         );
+    }
+
+    private boolean oneFromBracketMachers(String protein, int proteinIndex, int patternIndex, String patternElement) {
+
+        String acids = patternElement.substring(1, patternElement.length() - 1);
+        return !acids.isEmpty() && acids.contains(valueOf(protein.charAt(proteinIndex + patternIndex)));
+    }
+
+    private boolean notInFromBracketMachers(String protein, int proteinIndex, int patternIndex, String patternElement) {
+        String acids = patternElement.substring(1, patternElement.length() - 1);
+        return !acids.isEmpty() && !acids.contains(valueOf(protein.charAt(proteinIndex + patternIndex)));
     }
 
     private List<String> SplitPattern(String pattern) {

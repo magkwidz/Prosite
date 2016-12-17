@@ -38,17 +38,48 @@ public class PrositeTest {
 
     @Test
     public void shouldFindFirstIndex() throws Exception {
-        assertThat(search("ABCD", "x"), contains(0,1,2,3));
+        assertThat(search("ABCD", "x"), contains(0, 1, 2, 3));
     }
 
     @Test
-    public void shouldFindIndexesOfBothSequence() throws Exception {
+    public void shouldFindBothSequences() throws Exception {
         assertThat(search("ABCDREWXABCE", "A-B-C"), contains(0, 8));
     }
 
     @Test
-    public void shouldFindIndexesOfOneSequence() throws Exception {
+    public void shouldFindOneSequence() throws Exception {
         assertThat(search("SABXDREWXABCE", "A-B-C"), contains(9));
+    }
+
+    @Test
+    public void shouldFindSequencesWithAlternativeAcids() throws Exception {
+        assertThat(search("SABXXABCE", "A-B-[XC]"), contains(1, 5));
+    }
+
+    @Test
+    public void shouldFindSequencesWithNoOfAcids() throws Exception {
+        assertThat(search("SABCXABXE", "A-B-{HC}"), contains(5));
+    }
+
+    @Test
+    public void shouldFindSequencesWithAllConditions() throws Exception {
+        assertThat(
+                search(
+                        "SRSLKMRGQAFVIFKEVSSAT", //RGQAFVIF
+                        "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]"
+                ),
+                contains(6)
+        );
+    }
+    @Test
+    public void shouldFindSequencesWithAllConditions2() throws Exception {
+        assertThat(
+                search(
+                        "KLTGRPRGVAFVRYNKREEAQ", //RGVAFVRY
+                        "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]"
+                ),
+                contains(6)
+        );
     }
 
     private Collection<Integer> search(String protein, String pattern) {
