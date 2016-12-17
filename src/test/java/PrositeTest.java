@@ -43,7 +43,7 @@ public class PrositeTest {
 
     @Test
     public void shouldFindBothSequences() throws Exception {
-        assertThat(search("ABCDREWXABCE", "A-B-C"), contains(0, 8));
+        assertThat(search("ABCDREWXABCEAB", "A-B-C"), contains(0, 8));
     }
 
     @Test
@@ -76,6 +76,17 @@ public class PrositeTest {
         assertThat(
                 search(
                         "KLTGRPRGVAFVRYNKREEAQ", //RGVAFVRY
+                        "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]"
+                ),
+                contains(6)
+        );
+    }
+
+    @Test
+    public void shouldFindSequencesWithAllConditions3() throws Exception {
+        assertThat(
+                search(
+                        "VGCSVHKGFAFVQYVNERNAR", //KGFAFVQY
                         "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]"
                 ),
                 contains(6)
