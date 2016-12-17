@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringUtils;
+
 import static org.apache.commons.lang3.StringUtils.contains;
 
 class PrositeValidator {
@@ -66,4 +68,10 @@ class PrositeValidator {
         }
         return !(inParens || inBrackets || inBraces);
     }
+
+    private boolean validateRepeats(String pattern) {
+        return true;
+    }
+
+
 }

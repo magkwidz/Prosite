@@ -1,12 +1,22 @@
-/**
- * Created by magda_000 on 17/12/2016.
- */
-public class Prosite {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
+import java.util.Collection;
+import java.util.HashSet;
 
-    public static String returnPrositeRegex(){
-        return  "[RK]-G-{EDRKHPCG}-[AGSCI]-[FY]-[LIVA]-x-[FYM]";
+class Prosite {
+
+    Collection<Integer> searchIndex(String protein, String pattern) {
+        if (pattern.isEmpty()) {
+            throw new RuntimeException("Pattern cannot be empty");
+        }
+        Collection<Integer> indexes = new HashSet<>();
+        Integer patternIterator = 0;
+        for (int i = 0; i < protein.length(); i++) {
+            if (protein.charAt(i) == pattern.charAt(patternIterator)) {
+                indexes.add(i);
+            } else {
+                patternIterator = 0;
+            }
+
+        }
+        return indexes;
     }
 }
