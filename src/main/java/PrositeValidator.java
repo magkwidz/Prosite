@@ -1,3 +1,5 @@
+import static org.apache.commons.lang3.StringUtils.contains;
+
 class PrositeValidator {
 
 
@@ -6,16 +8,8 @@ class PrositeValidator {
     }
 
     private boolean validateCharacters(String pattern) {
-        String allowedCharacters = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x";
-        if (pattern.isEmpty()) {
-            return false;
-        }
-        for (int i = 0; i < pattern.length(); i++) {
-            if (allowedCharacters.indexOf(pattern.charAt(i)) < 0) {
-                return false;
-            }
-        }
-        return true;
+        return !pattern.isEmpty()
+                && pattern.chars().allMatch(c -> contains("-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x", c));
     }
 
 
