@@ -25,7 +25,7 @@ public class PrositeValidatorTest {
 
     @Test
     public void shouldAcceptAllTheCharacters() throws Exception {
-        assertThat(validate("[-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x]"), is(true));
+        assertThat(validate("-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x"), is(true));
     }
 
     @Test
@@ -48,15 +48,18 @@ public class PrositeValidatorTest {
         assertThat(validate("[JH-"), is(false));
         assertThat(validate("[JH]-G(3,5"), is(false));
         assertThat(validate("[SSS-(DDD)-DDD]"), is(false));
-        assertThat(validate("]DDD["), is(false));
+        assertThat(validate("]DDD"), is(false));
+        assertThat(validate("}DDD"), is(false));
+        assertThat(validate("))"), is(false));
+
     }
 
-//    @Test
-//    public void shouldRejectUnmatchedNestedBrackets() throws Exception {
-//        assertThat(validate("{{DDD}"), is(false));
-//        assertThat(validate("[DDD]]"), is(false));
-//        assertThat(validate("((DDD)"), is(false));
-//    }
+    @Test
+    public void shouldRejectUnmatchedNestedBrackets() throws Exception {
+        assertThat(validate("{{DDD}"), is(false));
+        assertThat(validate("[DDD]]"), is(false));
+        assertThat(validate("((DDD)"), is(false));
+    }
 
     @Test
     public void shouldRejectIntertwinedBraces() throws Exception {

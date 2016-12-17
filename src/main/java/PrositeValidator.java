@@ -1,20 +1,17 @@
-/**
- * Created by magda_000 on 17/12/2016.
- */
-public class PrositeValidator {
+class PrositeValidator {
 
 
-    public boolean validate(String pattern) {
+    boolean validate(String pattern) {
         return validateCharacters(pattern) && validateBraces(pattern);
     }
 
     private boolean validateCharacters(String pattern) {
-        String allowedChracters = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x";
+        String allowedCharacters = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[](){},x";
         if (pattern.isEmpty()) {
             return false;
         }
         for (int i = 0; i < pattern.length(); i++) {
-            if (allowedChracters.indexOf(pattern.charAt(i)) < 0) {
+            if (allowedCharacters.indexOf(pattern.charAt(i)) < 0) {
                 return false;
             }
         }
@@ -24,49 +21,55 @@ public class PrositeValidator {
 
     private boolean validateBraces(String pattern) {
         boolean inBraces = false, inBrackets = false, inParens = false;
-        String betweenParens;
         for (int i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
                 case '(':
-                    if (!inBraces && !inBrackets) {
+                    if (!inBraces && !inBrackets && !inParens) {
                         inParens = true;
                         break;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
-                case ')' :
-                    inParens = false;
-                    break;
+                case ')':
+                    if (inParens) {
+                        inParens = false;
+                        break;
+                    } else {
+                        return false;
+                    }
                 case '{':
-                    if (!inParens && !inBrackets) {
+                    if (!inBraces && !inBrackets && !inParens) {
                         inBraces = true;
                         break;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 case '}':
-                    inBraces = false;
-                    break;
+                    if (inBraces) {
+                        inBraces = false;
+                        break;
+                    } else {
+                        return false;
+                    }
                 case '[':
-                    if (!inParens && !inBraces) {
+                    if (!inBraces && !inBrackets && !inParens) {
                         inBrackets = true;
                         break;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 case ']':
-                    inBrackets = false;
-                    break;
+                    if (inBrackets) {
+                        inBrackets = false;
+                        break;
+                    } else {
+                        return false;
+                    }
+
                 default:
                     break;
             }
         }
-        if (inParens || inBrackets || inBraces) {
-            return false;
-        }
-        return true;
+        return !(inParens || inBrackets || inBraces);
     }
 }
