@@ -8,7 +8,7 @@ class Prosite {
         if (pattern.isEmpty()) {
             throw new RuntimeException("Pattern cannot be empty");
         }
-        Collection<Integer> indexes = new HashSet<>();
+        Collection<Integer> indexes = new ArrayList<>();
         List<String> patternElements = SplitPattern(pattern);
 
         for (int proteinIndex = 0; proteinIndex < protein.length(); proteinIndex++) {
@@ -23,19 +23,20 @@ class Prosite {
                         Integer repetitionSize = Integer.parseInt(repetitionString);
                         proteinMatches = repetitionExactlyITimesMachers(protein, proteinIndex, patternIndex, acid, repetitionSize, repetitionOffset);
                         if (proteinMatches) {
-                            repetitionOffset += repetitionSize-1;
+                            repetitionOffset += repetitionSize - 1;
                         }
                     } else if (patternElement.contains("[")) { //case 2: one acid from bracket
-                        proteinMatches = oneFromBracketMachers(protein, proteinIndex+repetitionOffset, patternIndex, patternElement);
+                        proteinMatches = oneFromBracketMachers(protein, proteinIndex + repetitionOffset, patternIndex, patternElement);
                     } else if (patternElement.contains("{")) {   //case 3: not acid in bracket
                         proteinMatches = notInFromBracketMachers(protein, proteinIndex + repetitionOffset, patternIndex, patternElement);
-                    } else
-                        proteinMatches = !patternElement.contains(",") && acidMatches(protein, proteinIndex, patternIndex, repetitionOffset, patternElement);
-
+                    } else if (patternElement.contains(",")) {
+                        proteinMatches = false;
+                    } else {
+                        proteinMatches = acidMatches(protein, proteinIndex, patternIndex, repetitionOffset, patternElement);
+                    }
                     if (proteinMatches) {
                         if (patternIndex == patternElements.size() - 1) {
                             indexes.add(proteinIndex);
-                            proteinIndex += repetitionOffset;
                         }
                     } else {
                         patternIndex = patternElements.size();

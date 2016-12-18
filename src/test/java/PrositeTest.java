@@ -170,6 +170,27 @@ public class PrositeTest {
         );
     }
 
+    @Test
+    public void shouldFindThreeRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "PCKGGGAKKKPCKGGGAHPCKGGGSJK",
+                        "P-C-K-G(3)-[AS]"
+                ),
+                contains(0,10,18)
+        );
+    }
+
+    @Test
+    public void shouldFindLongRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "PVSGESGGGGGASHHJPVSGESGGGGGSKLKLPVSGESGGGGGS",
+                        "P-x(2)-G-E-S-G(5)-{FH}"
+                ),
+                contains(0,16,32)
+        );
+    }
 
     private Collection<Integer> search(String protein, String pattern) {
         return sut.searchIndex(protein, pattern);
