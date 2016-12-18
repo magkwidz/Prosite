@@ -236,16 +236,16 @@ public class PrositeTest {
         );
     }
 
-    @Test
-    public void shouldFindTwoResultWithAllConditionReqSequences() throws Exception {
-        assertThat(
-                search(
-                        "SIGHBSGGGGASDDJSSGGGGGA",
-                        "S-x(4)-S-G(4,5)-{GBD}"
-                ),
-                contains(0,11)
-        );
-    }
+//    @Test
+//    public void shouldFindTwoResultWithAllConditionReqSequences() throws Exception {
+//        assertThat(
+//                search(
+//                        "SIGHBSGGGGASDDJSSGGGGGA",
+//                        "S-x(4)-S-G(4,5)-{GBD}"
+//                ),
+//                contains(0,11)
+//        );
+//    }
 
     private Collection<Integer> search(String protein, String pattern) {
         return sut.searchIndex(protein, pattern);
