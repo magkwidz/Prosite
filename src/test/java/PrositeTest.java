@@ -62,7 +62,7 @@ public class PrositeTest {
     }
 
     @Test
-    public void shouldFindSequencesWithAllConditions() throws Exception {
+    public void shouldFindSequencesWithAllBasicConditions() throws Exception {
         assertThat(
                 search(
                         "SRSLKMRGQAFVIFKEVSSAT", //RGQAFVIF
@@ -72,7 +72,7 @@ public class PrositeTest {
         );
     }
     @Test
-    public void shouldFindSequencesWithAllConditions2() throws Exception {
+    public void shouldFindSequencesWithAllBasicConditions2() throws Exception {
         assertThat(
                 search(
                         "KLTGRPRGVAFVRYNKREEAQ", //RGVAFVRY
@@ -83,7 +83,7 @@ public class PrositeTest {
     }
 
     @Test
-    public void shouldFindSequencesWithAllConditions3() throws Exception {
+    public void shouldFindSequencesWithAllBasicConditions3() throws Exception {
         assertThat(
                 search(
                         "VGCSVHKGFAFVQYVNERNAR", //KGFAFVQY
@@ -92,6 +92,84 @@ public class PrositeTest {
                 contains(6)
         );
     }
+    @Test
+    public void shouldFindRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "ABCAAAGHCAAHBAAAH", //CAAA || BAAA
+                        "[ABC]-A(3)"
+                ),
+                contains(2,12)
+        );
+    }
+
+    @Test
+    public void shouldFindOneRepetitionAndAcidSequences() throws Exception {
+        assertThat(
+                search(
+                        "CAAPFHCAACWCHBAANH",
+                        "C-A(2)-P"
+                ),
+                contains(0)
+        );
+    }
+
+    @Test
+    public void shouldFindOneWildcardRepetitionAndAcidSequences() throws Exception {
+        assertThat(
+                search(
+                        "CAAPFHCAACWCHBAANH",
+                        "C-x(2)-[PAC]"
+                ),
+                contains(0,6,11)
+        );
+    }
+
+    @Test
+    public void shouldFindWildcardRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "BABCXXX", // ABCX
+                        "A-x(3)"
+                ),
+                contains(1)
+        );
+    }
+
+    @Test
+    public void shouldFindOneWildcardRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "BABCXAXX", //ABCX
+                        "A-x(3)"
+                ),
+                contains(1)
+        );
+    }
+
+
+    @Test
+    public void shouldFindTwoRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "CAAPPFHCAAPPCWCHBAANH",
+                        "C-A(2)-P(2)"
+                ),
+                contains(0,7)
+        );
+    }
+
+    @Test
+    public void shouldFindOneRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "CAAGPPFHCAAFPPCWCHBAANH",
+                        "C-A(2)-G-P(2)"
+                ),
+                contains(0)
+        );
+    }
+
 
     private Collection<Integer> search(String protein, String pattern) {
         return sut.searchIndex(protein, pattern);
