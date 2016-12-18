@@ -126,6 +126,17 @@ public class PrositeTest {
     }
 
     @Test
+    public void shouldFindThreeExactlyRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "BBBHJBBBUSBBHIUBBB", // BBB
+                        "B(3)"
+                ),
+                contains(0,5,15)
+        );
+    }
+
+    @Test
     public void shouldFindWildcardRepetitionSequences() throws Exception {
         assertThat(
                 search(
@@ -185,10 +196,54 @@ public class PrositeTest {
     public void shouldFindLongRepetitionSequences() throws Exception {
         assertThat(
                 search(
-                        "PVSGESGGGGGASHHJPVSGESGGGGGSKLKLPVSGESGGGGGS",
+                        "PVSGESGGGGGASHHJPVSGESGGGGGSKLKLPVSGESGGGGGSA",
                         "P-x(2)-G-E-S-G(5)-{FH}"
                 ),
                 contains(0,16,32)
+        );
+    }
+
+    @Test
+    public void shouldFindRangeRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "AAAAHHHAAHAAAHAHHH",
+                        "A(3,4)"
+                ),
+                contains(0,1,10)
+        );
+    }
+
+    @Test
+    public void shouldFindWildcardRangeRepetitionSequences() throws Exception {
+        assertThat(
+                search(
+                        "ABCDEFGH",
+                        "x(3,4)"
+                ),
+                contains(0,1,2,3,4,5)
+        );
+    }
+
+    @Test
+    public void shouldFindTwoResultWithAllConditionSequences() throws Exception {
+        assertThat(
+                search(
+                        "SIGHBSGGGGASDDJSSGGGGGA",
+                        "S-x(4)-S-G(4,5)-{BD}"
+                ),
+                contains(0,11)
+        );
+    }
+
+    @Test
+    public void shouldFindTwoResultWithAllConditionReqSequences() throws Exception {
+        assertThat(
+                search(
+                        "SIGHBSGGGGASDDJSSGGGGGA",
+                        "S-x(4)-S-G(4,5)-{GBD}"
+                ),
+                contains(0,11)
         );
     }
 
