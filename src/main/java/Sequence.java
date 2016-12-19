@@ -3,11 +3,11 @@ import java.util.Collection;
 
 import static java.util.Collections.singletonList;
 
-class SequenceMatcher {
+class Sequence {
 
     private final Collection<ProteinEater> eaters;
 
-    SequenceMatcher(Collection<ProteinEater> eaters) {
+    Sequence(Collection<ProteinEater> eaters) {
         this.eaters = eaters;
     }
 
