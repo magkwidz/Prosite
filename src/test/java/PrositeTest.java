@@ -5,13 +5,12 @@ import java.util.Collection;
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class PrositeTest {
 
-    private final Prosite sut = new Prosite();
+    private final Prosite sut = new Prosite(new ProteinSearcher(), new ProteinParser());
 
 
     @Test
@@ -71,6 +70,7 @@ public class PrositeTest {
                 contains(6)
         );
     }
+
     @Test
     public void shouldFindSequencesWithAllBasicConditions2() throws Exception {
         assertThat(
@@ -92,6 +92,7 @@ public class PrositeTest {
                 contains(6)
         );
     }
+
     @Test
     public void shouldFindRepetitionSequences() throws Exception {
         assertThat(
@@ -99,7 +100,7 @@ public class PrositeTest {
                         "ABCAAAGHCAAHBAAAH", //CAAA || BAAA
                         "[ABC]-A(3)"
                 ),
-                contains(2,12)
+                contains(2, 12)
         );
     }
 
@@ -121,7 +122,7 @@ public class PrositeTest {
                         "CAAPFHCAACWCHBAANH",
                         "C-x(2)-[PAC]"
                 ),
-                contains(0,6,11)
+                contains(0, 6, 11)
         );
     }
 
@@ -143,7 +144,7 @@ public class PrositeTest {
                         "BABCXAXX", //ABCX
                         "A-x(3)"
                 ),
-                contains(1)
+                containsInAnyOrder(1)
         );
     }
 
@@ -155,7 +156,7 @@ public class PrositeTest {
                         "CAAPPFHCAAPPCWCHBAANH",
                         "C-A(2)-P(2)"
                 ),
-                contains(0,7)
+                contains(0, 7)
         );
     }
 
@@ -177,7 +178,7 @@ public class PrositeTest {
                         "PCKGGGAKKKPCKGGGAHPCKGGGSJK",
                         "P-C-K-G(3)-[AS]"
                 ),
-                contains(0,10,18)
+                contains(0, 10, 18)
         );
     }
 
@@ -188,7 +189,29 @@ public class PrositeTest {
                         "PVSGESGGGGGASHHJPVSGESGGGGGSKLKLPVSGESGGGGGS",
                         "P-x(2)-G-E-S-G(5)-{FH}"
                 ),
-                contains(0,16,32)
+                contains(0, 16, 32)
+        );
+    }
+
+    @Test
+    public void shouldFindFromTwoSequences() throws Exception {
+        assertThat(
+                search(
+                        "ABCDDDDE",
+                        "D(1,3)-{D}"
+                ),
+                contains(4, 5, 6)
+        );
+    }
+
+    @Test
+    public void shouldFindWildcardRangeSequences() throws Exception {
+        assertThat(
+                search(
+                        "DDDC",
+                        "x(1,3)-D-C"
+                ),
+                containsInAnyOrder(0, 1)
         );
     }
 
